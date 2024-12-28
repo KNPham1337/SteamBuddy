@@ -1,25 +1,29 @@
-import 'dotenv/config'
+import { Command } from '../Commands/Command';
+import config from './config';
 
 /**
  * Make request to discord API
- * @param {*} endpoint 
+ * @param {string} endpoint 
  * @param {*} options 
  * @returns 
  */
-export async function DiscordRequest(endpoint, options) {
+export async function DiscordRequest(endpoint: string, method: string, body?: any): Promise<Response> {
     const url = 'https://discord.com/api/v10/' + endpoint;
 
-    // options contains a body, convert to json
-    if (options.body) options.body = JSON.stringify(options.body);
+    const bodyString: string = body ? JSON.stringify(body) : "";
 
+    console.log(bodyString);
     // Use of spread operator ... ensures that each option is accounted for
     const res = await fetch(url, {
         headers: {
-            Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
+            Authorization: `Bot ${config.DISCORD_TOKEN}`,
             'Content-Type': 'application/json; charset=UTF-8',
             'User-Agent': 'SteamBuddy (GitHub - SteamBuddy, 1.0.0)',
         },
-        ...options
+        method: method,
+
+        // TODO: Check if this can be here if the endpoint has no payload
+        body: bodyString
     });
 
     if (!res.ok) {
@@ -33,14 +37,17 @@ export async function DiscordRequest(endpoint, options) {
 
 /**
  * Install global commands on all guilds. Use this when features are production ready.
- * @param {*} appId The ID of the bot
- * @param {*} commands The commands to be installed
+ * @param {string} appId The ID of the bot
+ * @param {Command[]} commands The commands to be installed
  */
-export async function InstallGlobalCommands(appId, commands) {
+export async function InstallGlobalCommands(appId: string, commands: Command[]) {
     const endpoint = `applications/${appId}/commands`;
 
+    const payloads: any[] = [];
+    commands.forEach((command) => payloads.push(command.register()))
+
     try {
-        res = await DiscordRequest(endpoint, { method: 'PUT', body: commands });
+        await DiscordRequest(endpoint, 'PUT', payloads );
     } catch (err) {
         console.error(err);
     }
@@ -53,13 +60,16 @@ export async function InstallGlobalCommands(appId, commands) {
  * @param {string} guildId The id of the guild/server for commands to exist in
  * @param {*} commands The commands to overwrite
  */
-export async function InstallGuildCommands(appId, guildId, commands) {
+export async function InstallGuildCommands(appId: string, guildId: string, commands: Command[]) {
     const endpoint = `applications/${appId}/guilds/${guildId}/commands`;
 
+    const payloads: any[] = [];
+    commands.forEach((command) => payloads.push(command.register()))
+    console.log(payloads)
     try {
-        res = await DiscordRequest(endpoint, { method: 'PUT', body: commands }).then(response => (
-            console.log(`Commands registered in guild: ${guildId}`)
-        ));
+        await DiscordRequest(endpoint, 'PUT', payloads).then(res => (
+            console.log(`Command ${res} registered in guild: ${guildId}`))
+        )
     } catch (err) {
         console.error(err);
     }

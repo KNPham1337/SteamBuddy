@@ -74,3 +74,24 @@ The bot should now be able to receive interactions from Discord. The forwarding 
 - Choose a game to play
 - Leaderboard
 - Game Recommendations
+
+# Reducing API Requests
+
+## Discord
+
+Discord has a rate limit of 5 requests per second. To avoid hitting the rate limit, we can use a queue to manage the requests. The queue will store the requests and send them one at a time.\
+
+## Steam
+
+Steam has a rate limit of 100,000 requests per day. To avoid hitting the rate limit, we can cache the responses from the Steam API. The cache will store the responses and return them if the same request is made within a certain time frame. Otherwise, Database can be used to store the responses from the Steam API. The database will store the responses and return them if the same request is made within a certain time frame.\
+
+Caching can be done using Redis. Redis is an open-source, in-memory data structure store that can be used as a database, cache, and message broker. It supports data structures such as strings, hashes, lists, sets, sorted sets with range queries, bitmaps, hyperloglogs, geospatial indexes with radius queries, and streams. Another alternative is node-cache. node-cache is a simple in-memory cache for node.js. It allows you to store key-value pairs in memory and set an expiration time for each key-value pair.\
+
+A relational database such as MySQL or PostgreSQL can be used to store the responses from the Steam API. The database will store the responses and return them if the same request is made within a certain time frame. The database can be queried to check if the response is already stored. If the response is already stored, the response can be returned from the database. If the response is not stored, the response can be retrieved from the Steam API and stored in the database.
+
+Possible databases to use:
+
+- MySQL
+- PostgreSQL
+- MongoDB
+- sqlite3 (development)
