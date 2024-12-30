@@ -15,16 +15,23 @@ import { TestCommand } from './Commands/guild_commands.js';
 // Set up express app
 const app = express();
 // Connect to Port
-const PORT = config.PORT || 3000;
+const PORT = 80;
+
+const oauthUrl: string = `https://discord.com/oauth2/authorize?client_id=${config.APP_ID}&permissions=2048&response_type=code&redirect_uri=https%3A%2F%2F${config.REDIRECT_URI}%2F&integration_type=0&scope=identify+connections+bot`;
 // Authenticate Steam API Client
 // const steam = new SteamAPI(config.STEAM_TOKEN);
+
+// app.get('/', (req, res) => {
+//     console.log(`Access code is: ${req.query.code}`);
+// })
+
 
 /**
  * Interactions endpoint URL for discord
  * 
  * Parse request body and verifies incoming requests using discord-interactions
  */
-app.post('/interactions', verifyKeyMiddleware(config.DISCORD_PUBLIC_KEY),
+app.post('/steambuddy/interactions', verifyKeyMiddleware(config.DISCORD_PUBLIC_KEY),
     async function (req, res) {
         // Interaction type, id, and data
         const { type, id, data } = req.body;
@@ -43,6 +50,7 @@ app.post('/interactions', verifyKeyMiddleware(config.DISCORD_PUBLIC_KEY),
             case InteractionType.APPLICATION_COMMAND:
                 // data is an object but we only want to get the name component
                 {
+                    console.log("here");
                     const { name } = data;
                     
                     // Check if the command name is valid
@@ -70,6 +78,6 @@ app.post('/interactions', verifyKeyMiddleware(config.DISCORD_PUBLIC_KEY),
 
 // Handle dynamic listening
 app.listen(PORT, () => {
-    console.log('Listening on port', PORT);
+    console.log(`Listening on port http://localhost:${PORT}`);
     console.log('CTRL + C to kill process');
 });

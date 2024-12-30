@@ -1,5 +1,5 @@
-import { Command } from '../Commands/Command';
-import config from './config';
+import { Command } from '../Commands/Command.js';
+import config from './config.js';
 
 /**
  * Make request to discord API

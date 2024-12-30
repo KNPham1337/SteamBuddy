@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "server": "npx ngrok http 3000",
+    "server": "npx ngrok start development",
     "register": "tsx src/Commands/register_guild.ts",
     "start": "tsx dist/index.js",
     "lint": "eslint ./src",
@@ -21,7 +21,6 @@
     "eslint": "^9.17.0",
     "globals": "^15.14.0",
     "ngrok": "^5.0.0-beta.2",
-    "nodemon": "^3.1.7",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.2"

@@ -1,4 +1,4 @@
-import config from './config';
+import config from './config.js';
 import SteamAPI from 'steamapi';
 
 if (!config.STEAM_TOKEN) throw new Error('missing or invalid Steam api token');

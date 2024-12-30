@@ -1,7 +1,7 @@
-import { TestCommand } from "./guild_commands";
-import { Command } from "./Command";
-import config from "../Tools/config";
-import { InstallGuildCommands } from "../Tools/utils";
+import { TestCommand } from "./guild_commands.js";
+import { Command } from "./Command.js";
+import config from "../Tools/config.js";
+import { InstallGuildCommands } from "../Tools/utils.js";
 
 const testCommand = new TestCommand();
 const ALL_COMMANDS: Command[] = [testCommand];
