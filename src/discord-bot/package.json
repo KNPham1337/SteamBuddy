@@ -1,9 +1,13 @@
 {
-  "name": "steambuddy",
+  "name": "steambuddy-bot",
   "version": "1.0.0",
   "description": "Discord bot that connects users steam accounts and friend information onto discord.",
   "main": "app.js",
   "scripts": {
+    "dev": "tsx watch index.ts",
+    "server": "npx ngrok start development",
+    "deploy-local": "tsx src/utils/deploy-commands.ts local",
+    "deploy-global": "tsx src/utils/deploy-commands.ts global",
     "start": "tsx dist/index.js",
     "lint": "eslint ./src",
     "build": "tsc"

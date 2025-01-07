@@ -1,8 +1,7 @@
 // Separate logic into steam api file
 // Separate logic into discord api file
 
-import config from './utils/interfaces/config.js';
-import './server'
+import { DISCORD_TOKEN } from './utils/config.js';
 
 import { Client, GatewayIntentBits} from 'discord.js';
 import { loadCommands } from './utils/handlers/commandHandler.js';
@@ -23,4 +22,4 @@ client.commands = await loadCommands(join(__dirname, 'commands'));
 await loadEvents(join(__dirname, 'events'), client);
 
 // Login
-await client.login(config.DISCORD_TOKEN);
+await client.login(DISCORD_TOKEN);

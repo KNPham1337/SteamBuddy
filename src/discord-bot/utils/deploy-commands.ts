@@ -1,7 +1,7 @@
 import { loadCommands } from "./handlers/commandHandler.js";
 import { Routes, REST, RESTPostAPIChatInputApplicationCommandsJSONBody } from "discord.js";
 import path from "node:path";
-import config from "./interfaces/config.js";
+import config from "./config.js";
 import { fileURLToPath } from 'url';
 
 // Get the current directory name

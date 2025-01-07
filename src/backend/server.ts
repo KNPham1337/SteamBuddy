@@ -5,7 +5,9 @@
 //   verifyKeyMiddleware,
 // } from 'discord-interactions';
 // 
-// import config from '../utils/interfaces/config.js';
+// 
+// 
+// import config from '../'
 // 
 // // Set up express app
 // const app = express();

@@ -108,6 +108,6 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/discord-bot/events", "src/discord-bot/utils", "src/discord-bot/commands", "src/discord-bot/index.ts"],
   "exclude": ["node_modules", "dist", ".env"]
 }
