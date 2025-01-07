@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "server": "npx ngrok start development",
-    "register": "tsx src/Commands/register_guild.ts",
+    "deploy-local": "tsx src/utils/deploy-commands.ts local",
+    "deploy-global": "tsx src/utils/deploy-commands.ts global",
     "start": "tsx dist/index.js",
     "lint": "eslint ./src",
     "build": "tsc"

@@ -95,3 +95,9 @@ Possible databases to use:
 - PostgreSQL
 - MongoDB
 - sqlite3 (development)
+
+PLAN
+
+- express for hosting a local development server
+- axios, steamapi for making api calls to external apis
+- discord.js to handle registering/creation/interactions on discord
