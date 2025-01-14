@@ -22,4 +22,35 @@ client.commands = await loadCommands(join(__dirname, 'commands'));
 await loadEvents(join(__dirname, 'events'), client);
 
 // Login
-await client.login(DISCORD_TOKEN);
+let isLoggedIn = false;
+
+if (!isLoggedIn) {
+    await client.login(DISCORD_TOKEN);
+    isLoggedIn = true;
+}
+
+const cleanup = async (exitCode: number) => {
+    console.log('Destroying client...');
+    await client.destroy();
+    console.log(`Exiting with code ${exitCode}`);
+    process.exit(exitCode);
+};
+
+process.on('SIGINT', async () => {
+    console.log('SIGINT signal received.');
+    cleanup(0);
+}); 
+process.on('SIGTERM', () => {
+    console.log('SIGTERM signal received.');
+    cleanup(0);
+});
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err);
+    cleanup(1);
+});
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    cleanup(1);
+});
+
+console.log('Process event listeners set up.');
