@@ -1,0 +1,1 @@
+This folder will be responsible for holding the routes that are used in the frontend of the application. Each route will use components and styles from the `src/components` and `src/styles` folders, respectively.
