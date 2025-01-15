@@ -1,0 +1,19 @@
+{
+  // Tailwind
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+
+  // tailwindDocs
+  "tailwindDocs.useSimpleBrowser": false,
+
+  // npm intellisense
+  "npm-intellisense.importES6": true,
+  "npm-intellisense.importQuotes": "'",
+  "npm-intellisense.importLinebreak": ";\r\n",
+  "npm-intellisense.importDeclarationType": "const",
+  "npm-intellisense.showBuildInLibs": true
+}
