@@ -15,5 +15,6 @@
   "npm-intellisense.importQuotes": "'",
   "npm-intellisense.importLinebreak": ";\r\n",
   "npm-intellisense.importDeclarationType": "const",
-  "npm-intellisense.showBuildInLibs": true
+  "npm-intellisense.showBuildInLibs": true,
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }
