@@ -23,6 +23,7 @@ app.use(session({
     cookie: { secure: false } // set to true if using HTTPS
 }));
 
+// Allows backend to communicate with frontend website
 app.use(cors({
     origin: FRONTEND_URL,
     credentials: true
@@ -57,8 +58,6 @@ const generateJWT = (steamID: string) => {
 
 app.get("/auth/steam", passport.authenticate("steam"));
 
-let PROFILE: SteamProfile;
-
 // Steam OpenID callback URL
 app.get(
     "/auth/steam/return",
@@ -69,12 +68,12 @@ app.get(
             return;
         }
 
-        console.log(req.user);
-
         // Generate a JWT and send it to the client
         const { steamID, profile } = req.user as { steamID: string, profile: SteamProfile };
+        req.session.profile = profile;
+
         const token = generateJWT(steamID);
-        PROFILE = profile
+
 
         // Send the JWT as a cookie (httpOnly for security)
         res.cookie("authToken", token, { httpOnly: true });
@@ -106,17 +105,24 @@ app.get("/dashboard", authenticateJWT, (req: express.Request, res: express.Respo
     res.json({ message: `Welcome to your dashboard!`, user: req.user });
 });
 
-app.get("/user-info", authenticateJWT, (req: express.Request, res: express.Response) => {
-    // const { steamID } = req.user as { steamID: string };
-    // req.user
-    // res.json(req.user);
-    res.json(PROFILE)
-    console.log(PROFILE);
+app.get("/user-info", authenticateJWT, (req: Express.Request, res: express.Response) => {
+    res.json(req.session.profile)
 })
 
 app.get("/", (req: express.Request, res: express.Response) => {
     res.status(200).send("Home Page");
 })
+
+// This is supposed to clear cookies and make you login next time you rerun the server but for now you can just log off of steam manually to get the same effect
+// app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+//     req.session.destroy((err) => {
+//         if (err) {
+//             console.error(`Failed to destroy session: ${err}`);
+//         }
+//     });
+//     res.clearCookie("authToken");
+//     next();
+// })
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

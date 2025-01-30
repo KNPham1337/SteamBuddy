@@ -1,21 +1,16 @@
 {
   "extends": "../tsconfig.json",
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
   "compilerOptions": {
-    "baseUrl": ".",
     "rootDir": "./src",
     "outDir": "./dist",
     "target": "ESNext",
-    "jsx": "react-jsx",
+    "module": "NodeNext",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "paths": { "@/*": ["./src/*"] },
-    "composite": true
+    "composite": true,
+
+    "typeRoots": ["./src/types", "./node_modules/@types"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
