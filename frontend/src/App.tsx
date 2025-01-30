@@ -8,15 +8,13 @@ import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <ModeToggle />
-        <Routes>
-          <Route path="/" element={<SteamLoginButton />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      </ThemeProvider>
-    </>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <ModeToggle />
+      <Routes>
+        <Route path="/" element={<SteamLoginButton />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </ThemeProvider>
   );
 }
 
