@@ -35,7 +35,7 @@ const rest = new REST().setToken(config.DISCORD_TOKEN);
 				{ body: commands },
 			) as [];
 		}
-		
+
 
 		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
 	} catch (error) {

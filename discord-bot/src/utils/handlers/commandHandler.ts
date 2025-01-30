@@ -3,7 +3,7 @@ import { readdirSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 
-import Command from "../../@types/interfaces/Command.js";
+import Command from "../../types/interfaces/Command.js";
 
 export const loadCommands = async (commandsPath: string) => {
     const commands = new Collection<string, Command>();
@@ -22,6 +22,6 @@ export const loadCommands = async (commandsPath: string) => {
             console.warn(`[Warning] The command at ${file} is missing "data" or "execute".`);
         }
     }
-    
+
     return commands;
 }

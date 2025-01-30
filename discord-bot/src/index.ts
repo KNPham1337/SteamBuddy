@@ -1,9 +1,9 @@
 // Separate logic into steam api file
 // Separate logic into discord api file
 
-import { DISCORD_TOKEN } from './utils/config.js';
+import config from './utils/config.js';
 
-import { Client, GatewayIntentBits} from 'discord.js';
+import { Client, GatewayIntentBits } from 'discord.js';
 import { loadCommands } from './utils/handlers/commandHandler.js';
 import { loadEvents } from './utils/handlers/eventHandler.js';
 import { join } from 'node:path';
@@ -17,7 +17,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 // Load commands
 client.commands = await loadCommands(join(__dirname, 'commands'));
-    
+
 // Load events
 await loadEvents(join(__dirname, 'events'), client);
 
@@ -25,7 +25,7 @@ await loadEvents(join(__dirname, 'events'), client);
 let isLoggedIn = false;
 
 if (!isLoggedIn) {
-    await client.login(DISCORD_TOKEN);
+    await client.login(config.DISCORD_TOKEN);
     isLoggedIn = true;
 }
 
@@ -39,7 +39,7 @@ const cleanup = async (exitCode: number) => {
 process.on('SIGINT', async () => {
     console.log('SIGINT signal received.');
     cleanup(0);
-}); 
+});
 process.on('SIGTERM', () => {
     console.log('SIGTERM signal received.');
     cleanup(0);
