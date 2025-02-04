@@ -1,9 +1,7 @@
-import { Collection } from "discord.js";
+import { Collection, Command } from "discord.js";
 import { readdirSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
-
-import Command from "../../types/interfaces/Command.js";
 
 export const loadCommands = async (commandsPath: string) => {
     const commands = new Collection<string, Command>();

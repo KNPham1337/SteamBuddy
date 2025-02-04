@@ -1,9 +1,13 @@
 import { ChatInputCommandInteraction, Events, MessageFlags } from "discord.js";
 
 export default {
-    name: Events.InteractionCreate,
+	name: Events.InteractionCreate,
 	async execute(interaction: ChatInputCommandInteraction) {
-        if (!interaction.isChatInputCommand()) return;
+		if (!interaction.isChatInputCommand()) return;
+		if (!interaction.client.commands) {
+			console.error('Client commands collection is not initialized.');
+			return;
+		}
 
 		const command = interaction.client.commands.get(interaction.commandName);
 
@@ -22,5 +26,5 @@ export default {
 				await interaction.reply({ content: 'There was an error while executing this command!', flags: MessageFlags.Ephemeral });
 			}
 		}
-    }
+	}
 }

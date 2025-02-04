@@ -4,7 +4,7 @@
   "description": "Discord bot that connects users steam accounts and friend information onto discord.",
   "main": "app.js",
   "scripts": {
-    "dev": "tsx --watch index.ts --clear-screen=false",
+    "dev": "tsx --watch src/index.ts --clear-screen=false",
     "server": "npx ngrok start development",
     "deploy-local": "tsx src/utils/deploy-commands.ts local",
     "deploy-global": "tsx src/utils/deploy-commands.ts global",
