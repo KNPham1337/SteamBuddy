@@ -25,4 +25,4 @@ interface SteamProfile {
     photos: Array<{ value: string }>;
 }
 
-export default SteamProfile
+export default SteamProfile;

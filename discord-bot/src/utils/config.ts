@@ -11,6 +11,8 @@ interface Config {
     REDIRECT_URI: string,
     TEST_GUILD: string,
     PORT: number | undefined,
+    DEV_FRONTEND_URL: string,
+    DEV_BACKEND_URL: string,
 }
 
 configDotenv();
@@ -25,6 +27,8 @@ const config: Config = {
     REDIRECT_URI: process.env.REDIRECT_URI as string,
     TEST_GUILD: process.env.TEST_GUILD as string,
     PORT: process.env.PORT as number | undefined,
+    DEV_FRONTEND_URL: process.env.DEV_FRONTEND_URL as string,
+    DEV_BACKEND_URL: process.env.DEV_BACKEND_URL as string,
 }
 
 export default config;
