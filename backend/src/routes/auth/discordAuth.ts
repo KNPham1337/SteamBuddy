@@ -1,3 +1,5 @@
+// TODO: Create middleware for encrypting and decrypting discord profile
+
 import express from 'express';
 import axios, { AxiosRequestConfig } from 'axios';
 import { storeDiscordSession } from '@backend/utils/session.js';
@@ -13,8 +15,7 @@ router.get('/auth/discord/callback', async (req, res) => {
             return;
         }
 
-        console.log("Received:", req.query);
-
+        // Set up oauth post request
         const { code } = req.query;
         const url = 'https://discord.com/api/oauth2/token';
         const params = new URLSearchParams({
@@ -27,32 +28,38 @@ router.get('/auth/discord/callback', async (req, res) => {
         });
         const confOptions: AxiosRequestConfig<URLSearchParams> = { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } };
 
-        console.log(params.toString());
-        console.log(confOptions);
-
-        // Exchange the code from Discord Oauth for 
+        // Exchange the code from Discord Oauth for authentication token 
         const tokenResponse = await axios.post(url, params, confOptions);
 
+        // Gather discordID
         const userResponse = await axios.get('https://discord.com/api/users/@me', {
             headers: { Authorization: `Bearer ${tokenResponse.data.access_token}` }
         });
-
-        const discordId = userResponse.data.id;
-        console.log(discordId)
+        const discordProfile = userResponse.data;
+        console.log("Discord:", discordProfile);
 
         // Store Discord ID in session
-        storeDiscordSession(req, discordId);
-        console.log(req.session.discordId);
+        storeDiscordSession(req, discordProfile);
+        // console.log(req);
 
-        // Redirect to Steam OpenID
-        const steamRedirectUrl = `${config.DEV_BACKEND_URL}/auth/steam`;
+        // Save session and redirect to Steam OpenID
+        req.session.save((err) => {
+            if (err) {
+                console.error("Error saving session:", err);
+                res.status(500).json({ error: "Failed to save session" });
+                return;
+            }
+            const steamRedirectUrl = `${config.DEV_BACKEND_URL}/auth/steam`;
+            res.redirect(steamRedirectUrl);
+        });
 
-        res.redirect(steamRedirectUrl);
     } catch (error) {
-        console.error("Error fetching Discord token:", error.response?.data || error.message);
-        res.status(500).json({ error: "Failed to authenticate", details: error.response?.data });
-        // console.error('Discord OAuth Error:', error);
-        // res.status(500).send('Error authenticating with Discord');
+        if (axios.isAxiosError(error)) {
+            console.error("Error fetching Discord token:", error.response?.data || error.message);
+            res.status(500).json({ error: "Failed to authenticate", details: error.response?.data });
+        } else {
+            console.error("Error fetching Discord token:", error);
+        }
     }
 });
 

@@ -10,19 +10,19 @@ import discordAuthRoutes from './routes/auth/discordAuth.js'
 import config from "./config/config.js";
 
 const app = express();
-const FRONTEND_URL = config.DEV_FRONTEND_URL;
+const DEV_FRONTEND_URL = config.DEV_FRONTEND_URL;
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(session({
     secret: config.SESSION_SECRET,
-    resave: false,
+    resave: true,
     saveUninitialized: true,
     cookie: { secure: false } // set to true if using HTTPS
 }));
 
 // Allows backend to communicate with frontend website
-app.use(cors({ origin: FRONTEND_URL, credentials: true }));
+app.use(cors({ origin: DEV_FRONTEND_URL, credentials: true }));
 
 app.use(passport.initialize());
 app.use(passport.session());

@@ -1,18 +1,17 @@
 import { Request } from "express";
-// import session from "express-session";
+import { AuthenticatedUser, DiscordProfile } from "@backend/types/types.js";
 
 declare module "express-session" {
     interface SessionData {
-        discordId: string;
+        passport?: { user: { profile: AuthenticatedUser, discordProfile: DiscordProfile } };
+        tempDiscordProfile?: DiscordProfile;
     }
 }
 
-export function storeDiscordSession(req: Request, discordId: string) {
-    req.session.discordId = discordId;
-    console.log(req.session.discordId);
+export function storeDiscordSession(req: Request, discordProfile: DiscordProfile) {
+    req.session.tempDiscordProfile = discordProfile;
 }
 
-export function getDiscordSession(req: Request): string | null {
-    console.log(req.session.discordId);
-    return req.session.discordId || null;
+export function getDiscordSession(req: Request): DiscordProfile | null {
+    return req.session.passport?.user.discordProfile || null;
 }

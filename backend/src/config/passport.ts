@@ -1,4 +1,4 @@
-import SteamProfile from "@backend/types/types.js";
+import { SteamProfile } from "@backend/types/types.js";
 import passport from "passport";
 import SteamStrategy from 'passport-steam';
 import config from "./config.js";
@@ -7,10 +7,15 @@ passport.use(new SteamStrategy({
     returnURL: `http://localhost:${config.PORT}/auth/steam/callback`,
     realm: `http://localhost:${config.PORT}`,
     apiKey: config.STEAM_TOKEN,
+    passReqToCallback: true,
 },
-    (_, profile, done) => {
-        const steamID = profile.id;
-        done(null, { steamID, profile });
+    (req, _, profile, done) => {
+        if (!req.session.tempDiscordProfile) {
+            return done(new Error("Discord authentication is missing."));
+        }
+
+        const discordProfile = req.session.tempDiscordProfile;
+        done(null, { profile, discordProfile });
     }
 ));
 

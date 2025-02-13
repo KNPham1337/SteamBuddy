@@ -1,11 +1,18 @@
-import SteamProfile from "./types.js";
+import { DiscordProfile } from "./types.js";
 
-declare module 'express-session' {
+// declare module 'express-session' {
+// 
+//     interface SessionData {
+// 
+//         profile?: SteamProfile;
+// 
+//     }
+// 
+// }
 
+declare module "express-session" {
     interface SessionData {
-
-        profile?: SteamProfile;
-
+        passport?: { user: { profile: AuthenticatedUser, discordProfile: DiscordProfile } };
+        tempDiscordProfile?: DiscordProfile;
     }
-
 }

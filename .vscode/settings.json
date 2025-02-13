@@ -16,5 +16,18 @@
   "npm-intellisense.importLinebreak": ";\r\n",
   "npm-intellisense.importDeclarationType": "const",
   "npm-intellisense.showBuildInLibs": true,
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+
+  // node_modules
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/node_modules": true
+  },
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true
 }

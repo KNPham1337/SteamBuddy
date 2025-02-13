@@ -1,9 +1,9 @@
 import config from "@backend/config/config.js";
-import SteamProfile from "@backend/types/types.js";
+import passport from "@backend/config/passport.js";
+import { DiscordProfile, SteamProfile } from "@backend/types/types.js";
 import { getDiscordSession } from "@backend/utils/session.js";
 import express from 'express';
 import jwt from "jsonwebtoken";
-import passport from "../../config/passport.js";
 
 const router = express.Router();
 const FRONTEND_URL = config.DEV_FRONTEND_URL;
@@ -29,18 +29,19 @@ router.get("/auth/steam/callback", passport.authenticate("steam", { failureRedir
             return;
         }
 
-        const { steamID, profile } = req.user as { steamID: string, profile: SteamProfile };
+        console.log("User:", req.user);
+        const { profile: steamProfile, discordProfile } = req.user as { profile: SteamProfile, discordProfile: DiscordProfile };
+        console.log("Steam Profile:", steamProfile);
 
         // Save to the database
         // await saveUserToDatabase({ discordID, steamID });
+        // await saveUserProfilesToDatabase()
 
-        // Generate a JWT and send it to the client
-        req.session.profile = profile;
-        const token = generateJWT(steamID);
-
+        // Generate a JWT and send it to the client, allows for a user to come back to the site without needing to sign in again
+        const token = generateJWT(steamProfile._json.steamid);
 
         // Send the JWT as a cookie (httpOnly for security)
-        res.cookie("authToken", token, { httpOnly: true });
+        res.cookie("authToken", token, { maxAge: 900000, httpOnly: true });
         res.redirect(`${FRONTEND_URL}/link-success`);
     } catch (error) {
         console.error(`Steam authentication error:`, error);
