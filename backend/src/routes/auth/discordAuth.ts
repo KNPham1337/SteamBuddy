@@ -1,4 +1,4 @@
-// TODO: Create middleware for encrypting and decrypting discord profile
+// TODO: Connect postgresql 
 
 import express from 'express';
 import axios, { AxiosRequestConfig } from 'axios';
@@ -7,8 +7,9 @@ import config from '@backend/config/config.js';
 
 const router = express.Router();
 const REDIRECT_URI = `${config.DEV_BACKEND_URL}/auth/discord/callback`;
+const STEAM_REDIRECT_URL = `${config.DEV_BACKEND_URL}/auth/steam`;
 
-router.get('/auth/discord/callback', async (req, res) => {
+router.get('/auth/discord/callback', async (req: express.Request, res: express.Response) => {
     try {
         if (!req.query.code) {
             res.status(400).json({ error: "Authorization code missing" });
@@ -36,22 +37,11 @@ router.get('/auth/discord/callback', async (req, res) => {
             headers: { Authorization: `Bearer ${tokenResponse.data.access_token}` }
         });
         const discordProfile = userResponse.data;
-        console.log("Discord:", discordProfile);
 
         // Store Discord ID in session
         storeDiscordSession(req, discordProfile);
-        // console.log(req);
 
-        // Save session and redirect to Steam OpenID
-        req.session.save((err) => {
-            if (err) {
-                console.error("Error saving session:", err);
-                res.status(500).json({ error: "Failed to save session" });
-                return;
-            }
-            const steamRedirectUrl = `${config.DEV_BACKEND_URL}/auth/steam`;
-            res.redirect(steamRedirectUrl);
-        });
+        res.redirect(STEAM_REDIRECT_URL);
 
     } catch (error) {
         if (axios.isAxiosError(error)) {

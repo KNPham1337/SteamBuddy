@@ -15,39 +15,39 @@ const generateJWT = (steamID: string) => {
 router.get("/auth/steam", passport.authenticate("steam"));
 
 // Steam OpenID callback URL
-router.get("/auth/steam/callback", passport.authenticate("steam", { failureRedirect: "/" }), async (req: express.Request, res: express.Response) => {
-    try {
-        if (!req.user) {
-            res.status(401).json({ error: "Steam authentication failed" });
-            return;
+router.get("/auth/steam/callback", passport.authenticate("steam", { failureRedirect: "/" }),
+    async (req: express.Request, res: express.Response) => {
+        try {
+            if (!req.user) {
+                res.status(401).json({ error: "Steam authentication failed" });
+                return;
+            }
+
+            const discordID = getDiscordSession(req);
+            if (!discordID) {
+                res.status(400).json({ error: "No Discord ID found. Please retry authentication." });
+                return;
+            }
+
+            const { profile: steamProfile, discordProfile } = req.user as { profile: SteamProfile, discordProfile: DiscordProfile };
+            console.log("Steam Profile:", steamProfile);
+            console.log("Discord Profile:", discordProfile);
+
+            // Save to the database
+            // await saveUserToDatabase({ discordID, steamID });
+            // await saveUserProfilesToDatabase()
+
+            // Generate a JWT and send it to the client, allows for a user to come back to the site without needing to sign in again
+            const token = generateJWT(steamProfile._json.steamid);
+
+            // Send the JWT as a cookie (httpOnly for security)
+            res.cookie("authToken", token, { maxAge: 900000, httpOnly: true });
+            res.redirect(`${FRONTEND_URL}/link-success`);
+        } catch (error) {
+            console.error(`Steam authentication error:`, error);
+            res.status(500).send('Error authenticating with Steam');
         }
-
-        const discordID = getDiscordSession(req);
-
-        if (!discordID) {
-            res.status(400).json({ error: "No Discord ID found. Please retry authentication." });
-            return;
-        }
-
-        console.log("User:", req.user);
-        const { profile: steamProfile, discordProfile } = req.user as { profile: SteamProfile, discordProfile: DiscordProfile };
-        console.log("Steam Profile:", steamProfile);
-
-        // Save to the database
-        // await saveUserToDatabase({ discordID, steamID });
-        // await saveUserProfilesToDatabase()
-
-        // Generate a JWT and send it to the client, allows for a user to come back to the site without needing to sign in again
-        const token = generateJWT(steamProfile._json.steamid);
-
-        // Send the JWT as a cookie (httpOnly for security)
-        res.cookie("authToken", token, { maxAge: 900000, httpOnly: true });
-        res.redirect(`${FRONTEND_URL}/link-success`);
-    } catch (error) {
-        console.error(`Steam authentication error:`, error);
-        res.status(500).send('Error authenticating with Steam');
-    }
-});
+    });
 
 const authenticateJWT = (
     req: express.Request,
